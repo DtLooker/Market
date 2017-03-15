@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.looker.market.fragment.CategoryFragment;
 import com.looker.market.fragment.HomeFragment;
 import com.looker.market.fragment.HotFragment;
 import com.looker.market.fragment.MineFragment;
+import com.looker.market.widget.MToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,19 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentTabHost mTabHost;
     private List<Tab> tabs = new ArrayList<>(5);
+    private MToolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getSupportActionBar().hide();
         initTabHost();
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        mToolbar = (MToolbar) findViewById(R.id.toolbar);
     }
 
     private void initTabHost() {
@@ -55,9 +63,13 @@ public class MainActivity extends AppCompatActivity {
             tabSpec.setIndicator(buildIndicator(tab));
             mTabHost.addTab(tabSpec, tab.getFragment(), null);
         }
+
+        mTabHost.setCurrentTab(0);
+        mTabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
     }
 
     private View buildIndicator(Tab tab){
+
         View inflate = LayoutInflater.from(this).inflate(R.layout.item_tab, null);
         ImageView tabIcon = (ImageView) inflate.findViewById(R.id.item_tab_iv);
         TextView tabText = (TextView) inflate.findViewById(R.id.item_tab_tv);

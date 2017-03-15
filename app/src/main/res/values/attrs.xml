@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="rightButtonIcon" format="reference"/>
+    <attr name="isShowSearchView" format="boolean"/>
+
+    <declare-styleable name="MToolbar">
+        <attr name="rightButtonIcon"/>
+        <attr name="isShowSearchView"/>
+    </declare-styleable>
+
+</resources>
