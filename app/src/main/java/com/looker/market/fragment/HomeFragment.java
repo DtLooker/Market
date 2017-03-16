@@ -4,26 +4,35 @@ package com.looker.market.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.looker.market.Constants;
 import com.looker.market.R;
+import com.looker.market.adapter.HomeCampaignAdapter;
 import com.looker.market.adapter.MPagerAdapter;
 import com.looker.market.bean.Banner;
+import com.looker.market.bean.Campaign;
+import com.looker.market.bean.HomeCampaign;
 import com.looker.market.listener.MPagerListener;
-import com.looker.market.okhttp.BaseCallback;
+import com.looker.market.okhttp.LoadCallback;
 import com.looker.market.okhttp.OKHttpHelper;
+import com.looker.market.widget.DeviderItemDecotation;
 import com.looker.market.widget.MyIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -33,6 +42,8 @@ public class HomeFragment extends Fragment {
 
     private View mView;
 
+    private SliderLayout mSliderLayout;
+
     /***
      * banner
      ***/
@@ -40,6 +51,10 @@ public class HomeFragment extends Fragment {
     private MyIndicator mBannerIndicator;
     private List<Banner> mBanners;
     private List<View> mViewList;
+
+
+    private RecyclerView mRecycler;
+    private HomeCampaignAdapter mAdapter;
 
 
     @Override
@@ -52,39 +67,31 @@ public class HomeFragment extends Fragment {
 
         initView(mView);
         requestBanner();
+        requestCampaign();
         return mView;
     }
 
     private void initView(View view) {
+
+       // mSliderLayout = (SliderLayout) mView.findViewById(R.id.slider);
+
         /***初始化banner*/
         mBannerPager = (ViewPager) view.findViewById(R.id.indicator_pager);
         mBannerIndicator = (MyIndicator) view.findViewById(R.id.indicator);
+
+        mRecycler = (RecyclerView) view.findViewById(R.id.recycler_view);
+
     }
 
     private void requestBanner() {
 
-        OKHttpHelper.getInstance().get(Constants.API.BANNER, new BaseCallback<List<Banner>>() {
-            @Override
-            public void onResponseBefore(Request request) {
+        OKHttpHelper.getInstance().get(Constants.API.BANNER, new LoadCallback<List<Banner>>(getContext()) {
 
-            }
-
-            @Override
-            public void onFailure(Request request, Exception e) {
-
-            }
 
             @Override
             public void onSuccess(Response response, List<Banner> banners) {
                 mBanners = banners;
-
-                for (Banner banner : mBanners) {
-                    Log.i("TAG", "banner.getImgUrl(): " + banner.getImgUrl());
-                    Log.i("TAG", "banner.getName(): " + banner.getName());
-                    Log.i("TAG", "banner.getDescription(): " + banner.getDescription());
-                }
                 initBanner();
-//                initSlider();
             }
 
             @Override
@@ -92,6 +99,36 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+
+    private void requestCampaign() {
+
+        OKHttpHelper.getInstance().get(Constants.API.CAMPAIGN_HOME, new LoadCallback<List<HomeCampaign>>(getContext()) {
+
+            @Override
+            public void onSuccess(Response response, List<HomeCampaign> homeCampaigns) {
+                initRecycler(homeCampaigns);
+            }
+
+            @Override
+            public void onResponseErroe(Response response, int code, Exception e) {
+
+            }
+        });
+    }
+
+    private void initRecycler(List<HomeCampaign> homeCampaigns) {
+        mAdapter = new HomeCampaignAdapter(homeCampaigns, getContext());
+        mAdapter.setCampaignClickListener(new HomeCampaignAdapter.CampaignClickListener() {
+            @Override
+            public void onClickListener(View view, Campaign campaign) {
+                Toast.makeText(getContext(), campaign.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecycler.setAdapter(mAdapter);
+        mRecycler.addItemDecoration(new DeviderItemDecotation());
 
     }
 
@@ -110,5 +147,18 @@ public class HomeFragment extends Fragment {
 
     }
 
+    public void initSlider() {
+
+        for (Banner banner : mBanners) {
+            Log.e("TAG", "banner.getImagUrl(): " + banner.getImgUrl());
+            Log.e("TAG", "banner.getName(): " + banner.getName());
+            Log.e("TAG", "banner.getDescription(): " + banner.getDescription());
+            DefaultSliderView textSliderView = new DefaultSliderView(this.getActivity());
+            textSliderView.image(banner.getImgUrl());
+            textSliderView.description(banner.getName());
+            textSliderView.setScaleType(BaseSliderView.ScaleType.Fit);
+            mSliderLayout.addSlider(textSliderView);
+        }
+    }
 
 }

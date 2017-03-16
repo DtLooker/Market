@@ -12,9 +12,9 @@ public class Constants {
 
         public static final String BANNER = BASE_URL + "banner/query?type=1";
 
-        public static final String WARES_HOT=BASE_URL + "wares/hot";
-
         public static final String CAMPAIGN_HOME=BASE_URL + "campaign/recommend";
+
+        public static final String WARES_HOT=BASE_URL + "wares/hot";
     }
 
 }
