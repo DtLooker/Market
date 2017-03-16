@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="rightButtonIcon" format="reference"/>
-    <attr name="isShowSearchView" format="boolean"/>
-
+    <!--自定义toolbar-->
     <declare-styleable name="MToolbar">
-        <attr name="rightButtonIcon"/>
-        <attr name="isShowSearchView"/>
+        <attr name="rightButtonIcon" format="reference"/>
+        <attr name="isShowSearchView" format="boolean"/>
+    </declare-styleable>
+
+    <!--自定义indicator-->
+    <declare-styleable name="MyIndicator">
+        <attr name="indicator_num" format="integer"/>
+        <attr name="indicator_radius" format="integer"/>
+        <attr name="forePaint_color" format="integer"/>
+        <attr name="backPaint_color" format="integer"/>
     </declare-styleable>
 
 </resources>
