@@ -14,7 +14,9 @@ public class MPagerListener implements ViewPager.OnPageChangeListener {
 
     public MPagerListener(MyIndicator indicator) {
         mIndicator = indicator;
+
     }
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -30,4 +32,6 @@ public class MPagerListener implements ViewPager.OnPageChangeListener {
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
 }

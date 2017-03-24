@@ -1,14 +1,65 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.looker.market.fragment.CategoryFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              tools:context="com.looker.market.fragment.CategoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_left"
+        android:layout_width="85dp"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:textSize="100sp"
-        android:text="3"/>
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp">
+
+            </android.support.v4.view.ViewPager>
+
+            <com.looker.market.widget.MyIndicator
+                android:id="@+id/my_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicator_num="6"
+                app:indicator_radius="8"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+        <com.cjj.MaterialRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </com.cjj.MaterialRefreshLayout>
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

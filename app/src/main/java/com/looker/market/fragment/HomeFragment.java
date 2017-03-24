@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.SliderLayout;
@@ -19,15 +18,14 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.looker.market.Constants;
 import com.looker.market.R;
-import com.looker.market.adapter.HomeCampaignAdapter;
+import com.looker.market.adapter.HomeCampRecyclerAdapter;
 import com.looker.market.adapter.MPagerAdapter;
+import com.looker.market.adapter.decoration.DividerItemDecoration;
 import com.looker.market.bean.Banner;
-import com.looker.market.bean.Campaign;
 import com.looker.market.bean.HomeCampaign;
 import com.looker.market.listener.MPagerListener;
 import com.looker.market.okhttp.LoadCallback;
 import com.looker.market.okhttp.OKHttpHelper;
-import com.looker.market.widget.DeviderItemDecotation;
 import com.looker.market.widget.MyIndicator;
 
 import java.util.ArrayList;
@@ -54,7 +52,7 @@ public class HomeFragment extends Fragment {
 
 
     private RecyclerView mRecycler;
-    private HomeCampaignAdapter mAdapter;
+    private HomeCampRecyclerAdapter mAdapter;
 
 
     @Override
@@ -68,6 +66,7 @@ public class HomeFragment extends Fragment {
         initView(mView);
         requestBanner();
         requestCampaign();
+
         return mView;
     }
 
@@ -118,17 +117,16 @@ public class HomeFragment extends Fragment {
     }
 
     private void initRecycler(List<HomeCampaign> homeCampaigns) {
-        mAdapter = new HomeCampaignAdapter(homeCampaigns, getContext());
-        mAdapter.setCampaignClickListener(new HomeCampaignAdapter.CampaignClickListener() {
-            @Override
-            public void onClickListener(View view, Campaign campaign) {
-                Toast.makeText(getContext(), campaign.getTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        if (HomeCampRecyclerAdapter.getViewType() == HomeCampRecyclerAdapter.VIEW_TYPE_L){
+            mAdapter = new HomeCampRecyclerAdapter(homeCampaigns, getContext(), R.layout.template_home_left);
+        }else if (HomeCampRecyclerAdapter.getViewType() == HomeCampRecyclerAdapter.VIEW_TYPE_R){
+            mAdapter = new HomeCampRecyclerAdapter(homeCampaigns, getContext(), R.layout.template_home_right);
+        }
 
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecycler.setAdapter(mAdapter);
-        mRecycler.addItemDecoration(new DeviderItemDecotation());
+        mRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
     }
 

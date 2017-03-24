@@ -37,20 +37,46 @@ public class MyIndicator extends View {
 
     public MyIndicator(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+
+//        if (attrs != null) {
+//            TypedArray array = context
+//                    .obtainStyledAttributes(attrs, R.styleable.MyIndicator);
+//
+//            int count = array.getIndexCount();
+//            for (int i = 0; i < count; i++) {
+//                int attr = array.getIndex(i);
+//                switch (attr) {
+//                    case R.styleable.MyIndicator_indicator_num:
+//                        mNum = array.getInteger(R.styleable.MyIndicator_indicator_num, mNum);
+//                        break;
+//                    case R.styleable.MyIndicator_indicator_radius:
+//                        mRadius = array.getInteger(R.styleable.MyIndicator_indicator_radius, mRadius);
+//                        break;
+//                    case R.styleable.MyIndicator_forePaint_color:
+//                        mForeColor = array.getInteger(R.styleable.MyIndicator_forePaint_color,
+//                                getResources().getColor(R.color.darkorange));
+//                        break;
+//                    case R.styleable.MyIndicator_backPaint_color:
+//                        mBackColor = array.getInteger(R.styleable.MyIndicator_backPaint_color,
+//                                getResources().getColor(R.color.gray));
+//                        break;
+//                }
+//            }
+//           array.recycle();
+//            //indicator圆每个圆心的距离
+//            mGapWidth = 3 * mRadius;
+//            //初始化画笔
+//            initPaint();
+//
+//        }
     }
 
     public MyIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        //indicator圆每个圆心的距离
-        mGapWidth = 3 * mRadius;
-
-        //初始化画笔
-        initPaint();
-
         if (attrs != null) {
-            TypedArray array = context.getTheme()
-                    .obtainStyledAttributes(attrs, R.styleable.MyIndicator, defStyleAttr, 0);
+            TypedArray array = context
+                    .obtainStyledAttributes(attrs, R.styleable.MyIndicator);
 
             int count = array.getIndexCount();
             for (int i = 0; i < count; i++) {
@@ -73,8 +99,12 @@ public class MyIndicator extends View {
                 }
             }
             array.recycle();
-
+            //indicator圆每个圆心的距离
+            mGapWidth = 3 * mRadius;
+            //初始化画笔
+            initPaint();
         }
+
     }
 
     private void initPaint() {
@@ -125,6 +155,7 @@ public class MyIndicator extends View {
     }
 
     public void setOffset(int position, float offset) {
+        position %= 6;
         mOffset = (position + offset) * 3 * mRadius;
     }
 }

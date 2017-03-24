@@ -15,6 +15,10 @@ public class Constants {
         public static final String CAMPAIGN_HOME=BASE_URL + "campaign/recommend";
 
         public static final String WARES_HOT=BASE_URL + "wares/hot";
+
+        public static final String WARES_LIST=BASE_URL +"wares/list";
+
+        public static final String CATEGORY_LIST=BASE_URL +"category/list";
     }
 
 }

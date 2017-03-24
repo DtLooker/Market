@@ -42,7 +42,6 @@
             style="@style/bigRedButton"
             android:layout_gravity="bottom|right"/>
 
-
     </LinearLayout>
 
 </LinearLayout>
