@@ -11,9 +11,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
+
 import com.looker.market.R;
 
 
@@ -26,7 +27,7 @@ public class MToolbar extends Toolbar {
     private View mView;
     private EditText mSearchView;
     private TextView mTitle;
-    private ImageButton mRightButton;
+    private Button mRightButton;
 
     public MToolbar(Context context) {
         this(context, null);
@@ -74,7 +75,7 @@ public class MToolbar extends Toolbar {
 
             mSearchView = (EditText) mView.findViewById(R.id.toolbar_searchview);
             mTitle = (TextView) mView.findViewById(R.id.toolbar_title);
-            mRightButton = (ImageButton) mView.findViewById(R.id.toolbar_rightButton);
+            mRightButton = (Button) mView.findViewById(R.id.toolbar_rightButton);
 
             LayoutParams lp = new LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
@@ -82,15 +83,24 @@ public class MToolbar extends Toolbar {
         }
     }
 
-    private void setRightButtonIcon(Drawable icon) {
+    public Button getRightButton(){
+        return mRightButton;
+    }
+
+    public void setRightButtonIcon(Drawable icon) {
         if (icon != null){
-            mRightButton.setImageDrawable(icon);
+            mRightButton.setBackground(icon);
             mRightButton.setVisibility(VISIBLE);
         }
     }
 
     public void setRightButtonOnClickListener(OnClickListener listener){
         mRightButton.setOnClickListener(listener);
+    }
+
+    public void setRightButtonText(CharSequence text){
+        mRightButton.setText(text);
+        mRightButton.setVisibility(VISIBLE);
     }
 
     @Override
@@ -119,13 +129,13 @@ public class MToolbar extends Toolbar {
         }
     }
 
-    private void showTitleView() {
+    public void showTitleView() {
         if (mTitle != null){
             mTitle.setVisibility(VISIBLE);
         }
     }
 
-    private void hideTitleView() {
+    public void hideTitleView() {
         if (mTitle != null){
             mTitle.setVisibility(GONE);
         }

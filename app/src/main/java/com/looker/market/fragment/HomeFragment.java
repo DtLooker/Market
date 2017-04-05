@@ -1,6 +1,7 @@
 package com.looker.market.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,15 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.looker.market.Constants;
 import com.looker.market.R;
+import com.looker.market.WareListActivity;
 import com.looker.market.adapter.HomeCampRecyclerAdapter;
 import com.looker.market.adapter.MPagerAdapter;
 import com.looker.market.adapter.decoration.DividerItemDecoration;
 import com.looker.market.bean.Banner;
+import com.looker.market.bean.Campaign;
 import com.looker.market.bean.HomeCampaign;
 import com.looker.market.listener.MPagerListener;
 import com.looker.market.okhttp.LoadCallback;
@@ -39,8 +39,6 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
 
     private View mView;
-
-    private SliderLayout mSliderLayout;
 
     /***
      * banner
@@ -72,7 +70,6 @@ public class HomeFragment extends Fragment {
 
     private void initView(View view) {
 
-       // mSliderLayout = (SliderLayout) mView.findViewById(R.id.slider);
 
         /***初始化banner*/
         mBannerPager = (ViewPager) view.findViewById(R.id.indicator_pager);
@@ -116,13 +113,19 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void initRecycler(List<HomeCampaign> homeCampaigns) {
+    private void initRecycler(final List<HomeCampaign> homeCampaigns) {
 
-        if (HomeCampRecyclerAdapter.getViewType() == HomeCampRecyclerAdapter.VIEW_TYPE_L){
-            mAdapter = new HomeCampRecyclerAdapter(homeCampaigns, getContext(), R.layout.template_home_left);
-        }else if (HomeCampRecyclerAdapter.getViewType() == HomeCampRecyclerAdapter.VIEW_TYPE_R){
-            mAdapter = new HomeCampRecyclerAdapter(homeCampaigns, getContext(), R.layout.template_home_right);
-        }
+        mAdapter = new HomeCampRecyclerAdapter(homeCampaigns, getContext());
+        mAdapter.setOnCampaignClickListener(new HomeCampRecyclerAdapter.OnCampaignClickListener() {
+            @Override
+            public void onClick(View view, Campaign campaign) {
+
+                Intent intent = new Intent(getActivity(), WareListActivity.class);
+                intent.putExtra(Constants.Campaign_ID, campaign.getId());
+                startActivity(intent);
+            }
+        });
+
 
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecycler.setAdapter(mAdapter);
@@ -143,20 +146,6 @@ public class HomeFragment extends Fragment {
         mBannerPager.setAdapter(new MPagerAdapter(mViewList));
         mBannerPager.addOnPageChangeListener(new MPagerListener(mBannerIndicator));
 
-    }
-
-    public void initSlider() {
-
-        for (Banner banner : mBanners) {
-            Log.e("TAG", "banner.getImagUrl(): " + banner.getImgUrl());
-            Log.e("TAG", "banner.getName(): " + banner.getName());
-            Log.e("TAG", "banner.getDescription(): " + banner.getDescription());
-            DefaultSliderView textSliderView = new DefaultSliderView(this.getActivity());
-            textSliderView.image(banner.getImgUrl());
-            textSliderView.description(banner.getName());
-            textSliderView.setScaleType(BaseSliderView.ScaleType.Fit);
-            mSliderLayout.addSlider(textSliderView);
-        }
     }
 
 }

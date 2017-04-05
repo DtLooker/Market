@@ -106,6 +106,28 @@ public abstract class BaseRecyclerAdapter<T, H extends BaseViewHolder> extends R
         }
     }
 
+    public void refreshData(List<T> list){
+
+        if (list != null && list.size() > 0){
+            clear();
+            for (int i = 0; i < list.size(); i++) {
+                mDatas.add(i, list.get(i));
+                notifyItemInserted(i);
+            }
+        }
+    }
+
+    public void loadMoreData(List<T> list){
+
+        if (list != null && list.size() > 0){
+            int begin = mDatas.size();
+            for (int i = 0; i < list.size(); i++) {
+                mDatas.add(list.get(i));
+                notifyItemInserted(i + begin);
+            }
+        }
+    }
+
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      * @param holder A fully initialized helper.

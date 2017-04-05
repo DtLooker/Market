@@ -1,7 +1,7 @@
 package com.looker.market;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +16,7 @@ import com.looker.market.fragment.CategoryFragment;
 import com.looker.market.fragment.HomeFragment;
 import com.looker.market.fragment.HotFragment;
 import com.looker.market.fragment.MineFragment;
+import com.looker.market.widget.FragmentTabHost;
 import com.looker.market.widget.MToolbar;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTabHost mTabHost;
     private List<Tab> tabs = new ArrayList<>(5);
     private MToolbar mToolbar;
+
+    private CartFragment cartFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTabHost() {
 
-        mTabHost = (FragmentTabHost) findViewById(R.id.tab_host);
+        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 
-        mTabHost.setup(this, getSupportFragmentManager(),android.R.id.tabcontent);
+        mTabHost.setup(this, getSupportFragmentManager(),R.id.realtabcontent);
 
         Tab tab_home = new Tab(R.string.tab_home, R.drawable.selector_icon_home, HomeFragment.class);
         Tab tab_hot = new Tab(R.string.tab_hot, R.drawable.selector_icon_hot, HotFragment.class);
@@ -64,8 +67,39 @@ public class MainActivity extends AppCompatActivity {
             mTabHost.addTab(tabSpec, tab.getFragment(), null);
         }
 
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+
+                if (tabId == getString(R.string.tab_cart)){
+                    refreshData();
+                }else {
+                    mToolbar.hideTitleView();
+                    mToolbar.showSearchView();
+                    mToolbar.getRightButton().setVisibility(View.GONE);
+                }
+            }
+        });
+
         mTabHost.setCurrentTab(0);
         mTabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
+    }
+
+    private void refreshData(){
+
+        if (cartFragment == null){
+            Fragment fragment = getSupportFragmentManager()
+                    .findFragmentByTag(getString(R.string.tab_cart));
+
+            if (fragment != null){
+                cartFragment = (CartFragment) fragment;
+                cartFragment.refreshData();
+                cartFragment.changeToolbar();
+            }
+        }else {
+            cartFragment.refreshData();
+            cartFragment.changeToolbar();
+        }
     }
 
     private View buildIndicator(Tab tab){

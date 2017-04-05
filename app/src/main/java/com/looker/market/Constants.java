@@ -6,6 +6,8 @@ package com.looker.market;
 
 public class Constants {
 
+    public static final String Campaign_ID = "campaign_id";
+
     public static class API{
 
         public static final String BASE_URL="http://112.124.22.238:8081/course_api/";
@@ -17,6 +19,8 @@ public class Constants {
         public static final String WARES_HOT=BASE_URL + "wares/hot";
 
         public static final String WARES_LIST=BASE_URL +"wares/list";
+
+        public static final String WARES_CAMPAIN_LIST=BASE_URL +"wares/campaign/list";
 
         public static final String CATEGORY_LIST=BASE_URL +"category/list";
     }
