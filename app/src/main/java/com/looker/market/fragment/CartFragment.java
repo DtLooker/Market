@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.looker.market.MainActivity;
 import com.looker.market.R;
 import com.looker.market.adapter.CartAdapter;
+import com.looker.market.adapter.decoration.DividerItemDecoration;
 import com.looker.market.bean.ShoppingCart;
 import com.looker.market.util.CartProvider;
 import com.looker.market.widget.MToolbar;
@@ -52,7 +53,8 @@ public class CartFragment extends Fragment implements View.OnClickListener{
             mView = inflater.inflate(R.layout.fragment_cart, container, false);
         }
 
-        mCartProvider = new CartProvider(getContext());
+        mCartProvider = CartProvider.getInstance(getContext());
+        changeToolbar();
 
         initView(mView);
         showData();
@@ -81,6 +83,7 @@ public class CartFragment extends Fragment implements View.OnClickListener{
         List<ShoppingCart> carts = mCartProvider.getAll();
         mAdapter = new CartAdapter(carts, getContext(), R.layout.template_cart, mCheckBox, mTotal);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setAdapter(mAdapter);
     }
 

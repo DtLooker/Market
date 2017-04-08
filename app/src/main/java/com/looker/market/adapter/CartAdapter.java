@@ -29,7 +29,7 @@ public class CartAdapter extends SimpleRecyclerAdapter<ShoppingCart> implements 
     public CartAdapter(List<ShoppingCart> datas, Context context, int layoutResId, CheckBox checkBox, TextView total) {
         super(datas, context, layoutResId);
 
-        mProvider = new CartProvider(context);
+        mProvider = CartProvider.getInstance(context);
 
         mCheckBox = checkBox;
         setCheckBox(mCheckBox);

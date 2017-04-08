@@ -1,10 +1,12 @@
 package com.looker.market.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by looker on 2017/3/9.
  */
 
-public class Wares {
+public class Wares implements Serializable{
 
     private Long id;
     private String name;

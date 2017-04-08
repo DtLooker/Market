@@ -1,6 +1,7 @@
 package com.looker.market.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,8 @@ import com.cjj.MaterialRefreshLayout;
 import com.google.gson.reflect.TypeToken;
 import com.looker.market.Constants;
 import com.looker.market.R;
+import com.looker.market.WaresDetailActivity;
+import com.looker.market.adapter.BaseRecyclerAdapter;
 import com.looker.market.adapter.HotWRecyclerAdapter;
 import com.looker.market.adapter.decoration.DividerItemDecoration;
 import com.looker.market.bean.Page;
@@ -33,7 +36,7 @@ public class HotFragment extends Fragment {
     private MaterialRefreshLayout mMaterialRefreshLayout;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         if (mView == null) {
@@ -48,6 +51,17 @@ public class HotFragment extends Fragment {
                     @Override
                     public void load(List datas, int totalpage, int totalcount) {
                         mAdapter = new HotWRecyclerAdapter(datas, getContext(), R.layout.template_hot_wares);
+                        mAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Wares item = mAdapter.getItem(position);
+                                Intent intent = new Intent(getActivity(), WaresDetailActivity.class);
+                                intent.putExtra(Constants.WARE, item);
+                                startActivity(intent);
+                            }
+                        });
+
+
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
                         mRecyclerView.setAdapter(mAdapter);

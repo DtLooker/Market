@@ -5,6 +5,7 @@ import android.util.SparseArray;
 
 import com.google.gson.reflect.TypeToken;
 import com.looker.market.bean.ShoppingCart;
+import com.looker.market.bean.Wares;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,26 @@ public class CartProvider {
 
     private static final String JSON_CART = "json_cart";
 
+    private static CartProvider provider;
     private SparseArray<ShoppingCart> datas = null;
     private Context mContext;
 
-    public CartProvider(Context context){
+    private CartProvider(Context context){
 
         mContext = context;
         datas = new SparseArray<>(10);
         listToSparse();
+    }
+
+    public static CartProvider getInstance(Context context){
+        if (provider == null){
+            synchronized (CartProvider.class){
+                if (provider == null){
+                    provider = new CartProvider(context);
+                }
+            }
+        }
+        return provider;
     }
 
     public void put(ShoppingCart cart){
@@ -38,6 +51,11 @@ public class CartProvider {
         }
         datas.put(temp.getId().intValue(), temp);
         commit();
+    }
+
+    public void put(Wares wares){
+        ShoppingCart shoppingCart = convertData(wares);
+        put(shoppingCart);
     }
 
     public void update(ShoppingCart cart){
@@ -87,5 +105,17 @@ public class CartProvider {
             carts = JSONUtil.fromJson(json, new TypeToken<List<ShoppingCart>>(){}.getType());
         }
         return carts;
+    }
+
+    public ShoppingCart convertData(Wares item){
+        ShoppingCart shoppingCart = new ShoppingCart();
+
+        shoppingCart.setId(item.getId());
+        shoppingCart.setDescription(item.getDescription());
+        shoppingCart.setImgUrl(item.getImgUrl());
+        shoppingCart.setName(item.getName());
+        shoppingCart.setPrice(item.getPrice());
+
+        return shoppingCart;
     }
 }
